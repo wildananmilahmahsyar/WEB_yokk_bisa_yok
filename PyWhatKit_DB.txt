@@ -1,0 +1,5 @@
+Date: 15/12/2024
+Time: 1:12
+Phone Number: +6285240955741
+Message: Halo! Ini adalah pesan otomatis yang dikirim langsung menggunakan Python.
+--------------------

@@ -1,0 +1,26 @@
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #ddd;
+  }
+  
+  th, td {
+    text-align: left;
+    padding: 16px;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+.detail-link {
+    color: rgb(0, 0, 0); /* Ubah warna tulisan */
+    text-decoration: none; /* Menambahkan garis bawah */
+    font-weight: bold; /* Mengubah ketebalan font */
+}
+
+.detail-link:hover {
+    color: #1c2bff; /* Mengubah warna saat hover */
+}
+

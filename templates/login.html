@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TILANG ONLINE - Login</title>
+  <link rel="stylesheet" href="../static/style/login.css">
+  <link rel="icon" type="image/x-icon" href="../static/gambar/favicon.png">
+</head>
+<body>
+  <div class="login-container">
+    <h2 style="text-align: center;">
+      <img src="../static/gambar/favicon.png" alt="logo">
+    </h2>
+    <form action="/login" method="POST">
+      <label for="username">Nrp Petugas:</label>
+      <input type="text" id="username" name="username" placeholder="Masukkan Nomor Registrasi Pokok Anda" required>
+
+      <label for="password">Kata sandi:</label>
+      <input type="password" id="password" name="password" placeholder="Masukkan kata sandi" required>
+
+      <button type="submit">Login</button>
+    </form>
+  </div>
+
+  <div class="popup" id="errorPopup">
+    <div class="popup-contentalert">
+      <h3>Error</h3>
+      <p id="errorMessage"></p>
+      <button onclick="closePopup('errorPopup')">Tutup</button>
+    </div>
+  </div>
+
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+      <script>
+          function showPopup(message) {
+              document.getElementById("errorMessage").textContent = message;
+              document.getElementById("errorPopup").style.display = "flex";
+          }
+          showPopup("{{ messages[0] }}");
+      </script>
+  {% endif %}
+  {% endwith %}
+</body>
+
+<script>
+  function closePopup(popupId) {
+    document.getElementById(popupId).style.display = "none";
+  }
+</script>
+</html>

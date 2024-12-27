@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TILANG ONLINE - ADMIN</title>
+  <link rel="stylesheet" href="../static/style/register.css">
+  <link rel="icon" type="image/x-icon" href="../static/gambar/favicon.png">
+</head>
+<body>
+  <div class="register-container">
+    <h2 style="text-align: center;">
+      <img src="../static/gambar/favicon.png" alt="logo">
+    </h2>
+    <form action="{{ url_for('auth.register') }}" method="POST">
+      <label for="nama">Nama:</label>
+      <input type="text" id="nama" name="nama" placeholder="Masukkan Nama Anda" maxlength="100" required>
+    
+      <label for="nrp">Nrp Petugas:</label>
+      <input type="text" id="nrp" name="nrp" placeholder="Masukkan Nomor Registrasi Pokok Anda" pattern="\d+" maxlength="12" required>
+    
+      <label for="no_hp">No Hp:</label>
+      <input type="number" id="no_hp" name="no_hp" placeholder="Masukkan Nomor Hp Anda" pattern="^\d{10,13}$" required>
+    
+      <label for="registrasi_email">Email:</label>
+      <input type="email" id="registrasi_email" name="registrasi_email" placeholder="Masukkan email Anda" required>
+    
+      <label for="reg-password">Kata sandi:</label>
+      <input type="password" id="reg-password" name="password" placeholder="Buat kata sandi" minlength="8" required>
+    
+      <button type="submit">Daftar</button>      
+      <p>Batal Menambahkan Petugas? <a href="/login">Kembali</a>.</p>
+    </form>
+    
+  </div>
+
+  <!-- Pop-up Custom untuk Pesan Flash -->
+  <div class="popup" id="errorPopup" style="display: none;">
+    <div class="popup-contentalert">
+        <h3 id="popupTitle"></h3>        <!-- Judul ini akan berubah antara "Error" dan "Success" -->
+      <p id="errorMessage"></p>
+      <button onclick="closePopup('errorPopup')">Tutup</button>
+    </div>
+  </div>
+
+  <!-- Menampilkan pesan flash jika ada -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+      <script>
+          function closePopup(popupId) {
+            document.getElementById(popupId).style.display = "none";
+        }
+          // Fungsi untuk menampilkan pop-up custom
+          function showPopup(message, type) {
+            document.getElementById("errorMessage").textContent = message;
+            document.getElementById("popupTitle").textContent = type === "success" ? "Success" : "Error";
+            document.getElementById("errorPopup").style.display = "flex";
+        }
+
+          // Menampilkan pop-up dengan pesan flash dan kategori
+          showPopup("{{ messages[0][1] }}", "{{ messages[0][0] }}");
+      </script>
+  {% endif %}
+  {% endwith %}
+
+  <!-- Tabel Manajemen Pengguna untuk Superadmin -->
+  {% if session.get('user_role') == 'superadmin' %}
+  <!-- <h2 >Manajemen Pengguna</h2> -->
+  
+  <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; text-align: center;">
+    <tr>
+      <th>Nama</th>
+      <th>NRP</th>
+      <th>No HP</th>
+      <th>Email</th>
+      <th>Aksi</th>
+    </tr>
+    {% for user in users %}
+    <tr>
+      <td>{{ user.nama }}</td>
+      <td>{{ user.nrp }}</td>
+      <td>{{ user.no_hp }}</td>
+      <td>{{ user.email }}</td>
+      <td>
+        <!-- Tombol Edit -->
+        <!-- Tombol Edit -->
+      <form action="{{ url_for('auth.edit_user', user_id=user.id) }}" method="GET" style="display: inline;">
+        <button type="submit">Edit</button>
+      </form>
+
+      <!-- Tombol Hapus -->
+      <form action="{{ url_for('auth.delete_user', user_id=user.id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Anda yakin ingin menghapus pengguna ini?');">
+        <button type="submit">Hapus</button>
+      </form>
+
+      
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% endif %}
+
+  <!-- Form Edit Pengguna -->
+  {% if user_to_edit %}
+  <div class="edit-container">
+    <h2>Edit Pengguna</h2>
+    <form action="{{ url_for('auth.edit_user', user_id=user_to_edit.id) }}" method="POST">
+      <label for="edit-nama">Nama:</label>
+      <input type="text" id="edit-nama" name="nama" value="{{ user_to_edit.nama or '' }}" required>
+  
+      <label for="edit-nrp">NRP Petugas:</label>
+      <input type="text" id="edit-nrp" name="nrp" value="{{ user_to_edit.nrp or '' }}" required>
+  
+      <label for="edit-no_hp">No HP:</label>
+      <input type="number" id="edit-no_hp" name="no_hp" value="{{ user_to_edit.no_hp or '' }}" required>
+  
+      <label for="edit-email">Email:</label>
+      <input type="email" id="edit-email" name="email" value="{{ user_to_edit.email or '' }}" required>
+  
+      <button type="submit">Simpan Perubahan</button>
+      <a href="{{ url_for('auth.register') }}" class="cancel-button">Batal</a>
+    </form>
+  </div>
+  {% endif %}
+  
+
+
+</body>
+</html>
